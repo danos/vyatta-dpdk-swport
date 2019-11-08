@@ -1,0 +1,14 @@
+libvyatta-dpdk-swport.so.1 libvyatta-dpdk-swport1 #MINVER#
+ LIBVYATTA_SWPPORT_1.0@LIBVYATTA_SWPPORT_1.0 0.1.2
+ sw_port_create@LIBVYATTA_SWPPORT_1.0 0.1.2
+ sw_port_delete@LIBVYATTA_SWPPORT_1.0 0.1.12
+ sw_port_enqueue_rx_mbuf@LIBVYATTA_SWPPORT_1.0 0.1.2
+ sw_port_fal_get_link@LIBVYATTA_SWPPORT_1.0 0.1.6
+ sw_port_fal_priv_from_dev@LIBVYATTA_SWPPORT_1.0 0.1.2
+ sw_port_fal_report_link@LIBVYATTA_SWPPORT_1.0 0.1.2
+ sw_port_fal_report_link_intr@LIBVYATTA_SWPPORT_1.0 0.1.2
+ sw_port_from_hw_port@LIBVYATTA_SWPPORT_1.0 0.1.2
+ sw_port_register_onie_prom@LIBVYATTA_SWPPORT_1.0 0.1.10
+ sw_port_request_mac_addr@LIBVYATTA_SWPPORT_1.0 0.1.10
+ sw_port_tx_dequeue@LIBVYATTA_SWPPORT_1.0 0.1.6
+ sw_port_set_backplane@LIBVYATTA_SWPPORT_1.0 0.1.13

@@ -1,0 +1,19 @@
+LIBVYATTA_SWPPORT_1.0 {
+   global:
+        sw_port_create;
+	sw_port_enqueue_rx_mbuf;
+	sw_port_tx_dequeue;
+	sw_port_fal_report_link;
+	sw_port_fal_get_link;
+	sw_port_fal_priv_from_dev;
+	sw_port_from_dev;
+	sw_port_from_hw_port;
+	sw_port_fal_report_link_intr;
+	sw_port_register_onie_prom;
+	sw_port_request_mac_addr;
+	sw_port_delete;
+	sw_port_set_backplane;
+
+   local:
+        *;
+};

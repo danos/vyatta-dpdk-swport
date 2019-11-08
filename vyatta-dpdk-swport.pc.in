@@ -1,0 +1,8 @@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: vyatta-dpdk-swport
+Description: Shared library augmenting DPDK to add switch ports
+Version: @version@
+Libs: -L${libdir} -lvyatta-dpdk-swport
+Cflags: -I${includedir}

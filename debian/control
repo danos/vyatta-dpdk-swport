@@ -1,0 +1,21 @@
+Source: vyatta-dpdk-swport
+Section: net
+Priority: optional
+Maintainer: Vyatta Package Maintainers <DL-vyatta-help@att.com>
+Build-Depends: debhelper (>= 9), libdpdk-dev, pkg-config,
+               libdpdk-dev (>= 17.11.4-1vyatta3),
+Standards-Version: 3.9.8
+
+Package: libvyatta-dpdk-swport1
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends},
+Description: Vyatta switch ports shared objects
+ Shared library augmenting DPDK to add switch ports.
+
+Package: libvyatta-dpdk-swport-dev
+Architecture: any
+Section: libdevel
+Depends: ${misc:Depends}, libvyatta-dpdk-swport1 (= ${binary:Version}),
+Description: Vyatta switch ports headers
+ Shared library headers augmenting DPDK to add switch ports.
+

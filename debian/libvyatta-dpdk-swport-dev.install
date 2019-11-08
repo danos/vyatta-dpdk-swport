@@ -1,0 +1,3 @@
+usr/include/vyatta-dataplane/*.h
+usr/lib/*/*.so
+usr/lib/*/pkgconfig/*
