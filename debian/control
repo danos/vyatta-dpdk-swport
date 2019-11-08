@@ -3,7 +3,7 @@ Section: net
 Priority: optional
 Maintainer: Vyatta Package Maintainers <DL-vyatta-help@att.com>
 Build-Depends: debhelper (>= 9), libdpdk-dev, pkg-config,
-               libdpdk-dev (>= 17.11.4-1vyatta3),
+               libdpdk-dev (>= 18.11),
 Standards-Version: 3.9.8
 
 Package: libvyatta-dpdk-swport1

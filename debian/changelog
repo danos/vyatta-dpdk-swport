@@ -1,3 +1,9 @@
+vyatta-dpdk-swport (0.1.19) unstable; urgency=medium
+
+  * DANOS Import master
+
+ -- Robert Shearman <robert.shearman@att.com>  Fri, 08 Nov 2019 10:27:28 +0000
+
 vyatta-dpdk-swport (0.1.18.1) unstable; urgency=medium
 
   * DANOS Import

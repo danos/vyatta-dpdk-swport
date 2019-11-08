@@ -467,9 +467,10 @@ sw_port_dev_info(struct rte_eth_dev *dev,
 	dev_info->pci_dev = NULL;
 #else
 	dev_info->tx_offload_capa =
-		DEV_TX_OFFLOAD_MULTI_SEGS;
+		DEV_TX_OFFLOAD_MULTI_SEGS | DEV_TX_OFFLOAD_VLAN_INSERT;
 	dev_info->rx_offload_capa =
-		DEV_RX_OFFLOAD_SCATTER | DEV_RX_OFFLOAD_JUMBO_FRAME;
+		DEV_RX_OFFLOAD_SCATTER | DEV_RX_OFFLOAD_JUMBO_FRAME |
+		DEV_RX_OFFLOAD_VLAN_STRIP;
 #endif
 
 	/*
@@ -811,10 +812,8 @@ sw_port_vdev_create(struct rte_vdev_device *dev,
 
 	/* reserve an ethdev entry */
 	eth_dev = rte_eth_vdev_allocate(dev, sizeof(*switch_port));
-	if (!eth_dev) {
-		rte_free(data);
+	if (!eth_dev)
 		return NULL;
-	}
 
 	data = eth_dev->data;
 	switch_port = eth_dev->data->dev_private;
@@ -828,6 +827,8 @@ sw_port_vdev_create(struct rte_vdev_device *dev,
 
 	switch_port->numa_node = numa_node;
 	switch_port->name = strdup(rte_vdev_device_name(dev));
+	if (!switch_port->name)
+		goto error;
 	switch_port->unit = internal_args->hw_unit;
 	switch_port->port = internal_args->hw_port;
 	switch_port->port_id = eth_dev->data->port_id;
@@ -855,8 +856,6 @@ sw_port_vdev_create(struct rte_vdev_device *dev,
 		else
 			random_mac_addr(&switch_port->address.addr_bytes[0]);
 
-	data->port_id = eth_dev->data->port_id;
-	memmove(data->name, eth_dev->data->name, sizeof(data->name));
 	data->nb_rx_queues = (uint16_t)nb_rx_queues;
 	data->nb_tx_queues = (uint16_t)nb_tx_queues;
 
@@ -872,7 +871,6 @@ sw_port_vdev_create(struct rte_vdev_device *dev,
 	if (internal_args->flags & SWITCH_PORT_FLAG_INTR_LSC)
 		data->dev_flags |= RTE_ETH_DEV_INTR_LSC;
 
-	eth_dev->data = data;
 	eth_dev->dev_ops = &eth_ops;
 	data->kdrv = RTE_KDRV_NONE;
 	data->numa_node = numa_node;
@@ -892,13 +890,13 @@ sw_port_vdev_create(struct rte_vdev_device *dev,
 
 	return switch_port;
 error:
-	if (data) {
-		rte_free(data->rx_queues);
-		rte_free(data->tx_queues);
-	}
-	rte_free(data);
 	free(switch_port->name);
-	rte_free(switch_port);
+
+	/*
+	 * rte_eth_dev_release_port will attempt to free this, but it
+	 * is part of switch_port so NULL it.
+	 */
+	eth_dev->data->mac_addrs = NULL;
 	rte_eth_dev_release_port(eth_dev);
 
 	return NULL;
@@ -953,11 +951,15 @@ sw_port_pmd_uninit(struct rte_vdev_device *dev)
 	for (i = 0; i < eth_dev->data->nb_rx_queues; i++)
 		sw_port_rx_queue_release(eth_dev->data->rx_queues[i]);
 
-	rte_free(eth_dev->data->rx_queues);
-	rte_free(eth_dev->data->tx_queues);
-	rte_free(eth_dev->data->dev_private);
+	free(switch_port->name);
 
+	/*
+	 * rte_eth_dev_release_port will attempt to free this, but it
+	 * is part of switch_port so NULL it.
+	 */
+	eth_dev->data->mac_addrs = NULL;
 	rte_eth_dev_release_port(eth_dev);
+
 	return 0;
 }
 
