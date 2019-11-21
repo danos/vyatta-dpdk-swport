@@ -81,7 +81,7 @@ struct sw_port_create_args {
 	 * Returns: 0 on success
 	 */
 	int32_t (*plugin_tx_framer)(void *sw_port, void *fal_info,
-				    struct rte_mbuf *bufs);
+				    struct rte_mbuf **bufs);
 	/*
 	 * Returned information
 	 */

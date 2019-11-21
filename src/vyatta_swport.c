@@ -84,7 +84,7 @@ struct sw_port {
 	uint16_t (*fal_tx)(void *fal_info, uint16_t carrier, uint16_t port,
 			   struct rte_mbuf **bufs, uint16_t nb_bufs);
 	int32_t (*fal_tx_framer)(void *sw_port, void *fal_info,
-				 struct rte_mbuf *bufs);
+				 struct rte_mbuf **bufs);
 	char *name;
 	unsigned int numa_node;
 	int unit;
@@ -280,9 +280,10 @@ switch_port_tx(void *q, struct rte_mbuf **bufs, uint16_t nb_bufs)
 			if (unlikely((sw_port->fal_tx_framer)
 				     (sw_port,
 				      sw_port->fal_private,
-				      mbuf) != 0)) {
+				      &bufs[i]) != 0)) {
 				SWP_ERROR("tx_framer sw_port%d  port %d %p\n",
-					  sw_port->unit, sw_port->port, mbuf);
+					  sw_port->unit, sw_port->port,
+					  bufs[i]);
 				goto drop;
 			}
 
