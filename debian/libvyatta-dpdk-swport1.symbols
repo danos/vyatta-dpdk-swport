@@ -12,3 +12,4 @@ libvyatta-dpdk-swport.so.1 libvyatta-dpdk-swport1 #MINVER#
  sw_port_request_mac_addr@LIBVYATTA_SWPPORT_1.0 0.1.10
  sw_port_tx_dequeue@LIBVYATTA_SWPPORT_1.0 0.1.6
  sw_port_set_backplane@LIBVYATTA_SWPPORT_1.0 0.1.13
+ sw_port_get_dev_info@LIBVYATTA_SWPPORT_1.0 0.1.21

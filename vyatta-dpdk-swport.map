@@ -13,6 +13,7 @@ LIBVYATTA_SWPPORT_1.0 {
 	sw_port_request_mac_addr;
 	sw_port_delete;
 	sw_port_set_backplane;
+	sw_port_get_dev_info;
 
    local:
         *;

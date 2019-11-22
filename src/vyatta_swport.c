@@ -100,6 +100,8 @@ struct sw_port {
 	const struct eth_dev_ops *fal_dev_ops;
 	void *fal_private;
 	int (*plugin_detach_device)(const char *name);
+
+	struct swport_dev_info sw_dev_info;
 };
 
 static int (*switch_port_prep_header_change)(struct rte_mbuf **m,
@@ -839,6 +841,7 @@ sw_port_vdev_create(struct rte_vdev_device *dev,
 	switch_port->carrier_port = internal_args->bp_interconnect_port;
 	switch_port->carrier_dev =
 		&rte_eth_devices[switch_port->carrier_port];
+	switch_port->sw_dev_info = internal_args->sw_dev_info;
 
 	switch_port->fal_private = internal_args->plugin_private;
 	switch_port->fal_dev_ops = internal_args->plugin_dev_ops;
@@ -1192,6 +1195,20 @@ sw_port_delete(struct sw_port_delete_args *args)
 void sw_port_set_backplane(struct sw_port *port, uint16_t bp_port)
 {
 	port->carrier_port = bp_port;
+}
+
+int sw_port_get_dev_info(uint16_t port_id, struct swport_dev_info *devinfo)
+{
+	struct rte_eth_dev *eth_dev;
+	struct sw_port *port;
+
+	RTE_ETH_VALID_PORTID_OR_ERR_RET(port_id, -EINVAL);
+
+	eth_dev = &rte_eth_devices[port_id];
+	port = eth_dev->data->dev_private;
+
+	*devinfo = port->sw_dev_info;
+	return 0;
 }
 
 static struct rte_vdev_driver sw_port_pmd_drv = {

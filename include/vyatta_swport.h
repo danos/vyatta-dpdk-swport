@@ -24,6 +24,16 @@ extern "C" {
 struct sw_port;
 
 /*
+ * Information about the sw_port device for users of it
+ */
+struct swport_dev_info {
+	/* Port or LAG FAL object */
+	uint64_t fal_obj;
+	/* Is this a Link Aggregation device? */
+	bool is_lag;
+};
+
+/*
  * sw_port create support
  */
 
@@ -131,6 +141,10 @@ struct sw_port_create_args {
 	 */
 	int (*plugin_detach_device)(const char *devargs);
 
+	/*
+	 * Information about the device for users of it
+	 */
+	struct swport_dev_info sw_dev_info;
 };
 
 struct sw_port_delete_args {
@@ -238,6 +252,11 @@ int sw_port_delete(struct sw_port_delete_args *args);
  * update backplane port
  */
 void sw_port_set_backplane(struct sw_port *port, uint16_t bp_port);
+
+/*
+ * Get information about the device
+ */
+int sw_port_get_dev_info(uint16_t portid, struct swport_dev_info *devinfo);
 
 #ifdef __cplusplus
 }
