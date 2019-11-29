@@ -1007,8 +1007,9 @@ sw_port_pmd_init(struct rte_vdev_device *dev)
 
 	ret = -1;
 
-	if (internal_args->hw_port >= MAX_HW_SWITCH_PORTS ||
-	    internal_args->hw_unit >= MAX_HW_SWITCH_DEVICES) {
+	if (internal_args->hw_port != SW_P_PORT_NONE &&
+	    (internal_args->hw_port >= MAX_HW_SWITCH_PORTS ||
+	     internal_args->hw_unit >= MAX_HW_SWITCH_DEVICES)) {
 		SWP_ERROR("%s create fail, port %d unit %d\n",
 			  name, internal_args->hw_port, internal_args->hw_unit);
 		goto out_free;
@@ -1024,8 +1025,9 @@ sw_port_pmd_init(struct rte_vdev_device *dev)
 	/*
 	 * LUT used for demultiplexing incoming traffic
 	 */
-	fp_port2swport[internal_args->hw_unit][internal_args->hw_port] =
-		sw_port;
+	if (internal_args->hw_port != SW_P_PORT_NONE)
+		fp_port2swport[internal_args->hw_unit][internal_args->hw_port] =
+			sw_port;
 
 
 	/*Setup return info */

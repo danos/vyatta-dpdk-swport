@@ -21,6 +21,8 @@ extern "C" {
 #define SW_P_PMD_MAX_RX_QUEUE 1
 #define SW_P_PMD_MAX_TX_QUEUE 256
 
+#define SW_P_PORT_NONE UINT32_MAX
+
 struct sw_port;
 
 /*
