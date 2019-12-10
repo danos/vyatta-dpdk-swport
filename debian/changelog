@@ -1,3 +1,10 @@
+vyatta-dpdk-swport (0.1.21) unstable; urgency=medium
+
+  * Add API to retrieve information about the sw_port device
+  * Make specifying the port optional
+
+ -- Robert Shearman <robert.shearman@att.com>  Tue, 10 Dec 2019 16:47:49 +0000
+
 vyatta-dpdk-swport (0.1.20) unstable; urgency=medium
 
   [ Robert Shearman ]
