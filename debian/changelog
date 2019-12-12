@@ -1,3 +1,9 @@
+vyatta-dpdk-swport (0.1.22) unstable; urgency=medium
+
+  * Makefile: don't use -march=native (Fixes: VRVDR-49400)
+
+ -- Robert Shearman <robert.shearman@att.com>  Thu, 12 Dec 2019 12:55:53 +0000
+
 vyatta-dpdk-swport (0.1.21) unstable; urgency=medium
 
   * Add API to retrieve information about the sw_port device
