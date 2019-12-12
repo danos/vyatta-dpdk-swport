@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: LGPL-2.1-only
 #
 
-CFLAGS += $(shell pkg-config --cflags libdpdk) -fPIC -march=native
+CFLAGS += $(shell pkg-config --cflags libdpdk) -fPIC -O3
 LDFLAGS += $(shell pkg-config --libs libdpdk) -Wl,--version-script=vyatta-dpdk-swport.map
 LIBDIR := $(DESTDIR)/usr/lib/$(shell dpkg-architecture -qDEB_BUILD_MULTIARCH)
 INCDIR := $(DESTDIR)/usr/include/vyatta-dataplane
