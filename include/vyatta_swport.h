@@ -72,7 +72,7 @@ struct sw_port_create_args {
 	void *plugin_private;
 
 	/* Mac address of port */
-	struct ether_addr *mac;
+	struct rte_ether_addr *mac;
 
 	/*
 	 * Plugin supplied routine to transmit packets from a switch
@@ -243,7 +243,7 @@ bool sw_port_register_onie_prom(unsigned char *prom, uint16_t length,
 /*
  * Request a mac address of registered base + offset
  */
-bool sw_port_request_mac_addr(struct ether_addr *addr, uint8_t offset);
+bool sw_port_request_mac_addr(struct rte_ether_addr *addr, uint8_t offset);
 
 /*
  * delete sw_port

@@ -95,7 +95,7 @@ struct sw_port {
 
 	struct switch_port_queue rx_queues[SW_P_PMD_MAX_RX_QUEUE];
 
-	struct ether_addr address;
+	struct rte_ether_addr address;
 	struct rte_eth_dev *dev;
 	const struct eth_dev_ops *fal_dev_ops;
 	void *fal_private;
@@ -114,7 +114,7 @@ fp_port2swport[MAX_HW_SWITCH_DEVICES][MAX_HW_SWITCH_PORTS];
 static const char *drivername = "sw_port_vdev_pmd";
 
 static struct platform_param {
-	struct ether_addr base_mac_addr;
+	struct rte_ether_addr base_mac_addr;
 	uint16_t num_mac_addr;
 	uint8_t num_reserved_macs;
 } platform_cfg;
@@ -176,7 +176,7 @@ sw_port_register_onie_prom(unsigned char *prom, uint16_t length,
 		goto error;
 	}
 
-	memcpy(&platform_cfg.base_mac_addr, tlv->value, ETHER_ADDR_LEN);
+	memcpy(&platform_cfg.base_mac_addr, tlv->value, RTE_ETHER_ADDR_LEN);
 
 	tlv = tlvinfo_get_tlv(prom, TLV_CODE_MAC_SIZE, length);
 	if (!tlv) {
@@ -193,7 +193,7 @@ error:
 }
 
 bool __attribute__ ((externally_visible))
-sw_port_request_mac_addr(struct ether_addr *addr, uint8_t offset)
+sw_port_request_mac_addr(struct rte_ether_addr *addr, uint8_t offset)
 {
 	uint32_t mac;
 
@@ -207,7 +207,7 @@ sw_port_request_mac_addr(struct ether_addr *addr, uint8_t offset)
 		(platform_cfg.base_mac_addr.addr_bytes[3] << 16) +
 		offset;
 
-	memcpy(addr, &platform_cfg.base_mac_addr, ETHER_ADDR_LEN);
+	memcpy(addr, &platform_cfg.base_mac_addr, RTE_ETHER_ADDR_LEN);
 	addr->addr_bytes[5] = mac;
 	addr->addr_bytes[4] = mac >> 8;
 	addr->addr_bytes[3] = mac >> 16;
@@ -454,7 +454,7 @@ sw_port_tx_queue_setup(struct rte_eth_dev *dev, uint16_t queue_id,
 	return 0;
 }
 
-static void
+static int
 sw_port_dev_info(struct rte_eth_dev *dev,
 	struct rte_eth_dev_info *dev_info)
 {
@@ -485,8 +485,9 @@ sw_port_dev_info(struct rte_eth_dev *dev,
 		dev_info->tx_desc_lim.nb_max = 1;
 
 	if (port->fal_dev_ops->dev_infos_get)
-		return (port->fal_dev_ops->dev_infos_get)
-			(dev, dev_info);
+		(port->fal_dev_ops->dev_infos_get)(dev, dev_info);
+
+	return 0;
 }
 
 static int
@@ -538,7 +539,7 @@ sw_port_stats_get(struct rte_eth_dev *dev, struct rte_eth_stats *stats)
 	return 0;
 }
 
-static void
+static int
 sw_port_stats_reset(struct rte_eth_dev *dev)
 {
 	unsigned int i;
@@ -558,6 +559,8 @@ sw_port_stats_reset(struct rte_eth_dev *dev)
 		rte_atomic64_set(&txq->pkts, 0);
 		rte_atomic64_set(&txq->err_pkts, 0);
 	}
+
+	return 0;
 }
 static void
 sw_port_stats_init(struct sw_port *port)
@@ -598,13 +601,15 @@ sw_port_xstats_get(struct rte_eth_dev *dev, struct rte_eth_xstat *xstats,
 	return -ENOTSUP;
 }
 
-static void
+static int
 sw_port_xstats_reset(struct rte_eth_dev *dev)
 {
 	struct sw_port *port = dev->data->dev_private;
 
 	if (port->fal_dev_ops->xstats_reset)
 		(port->fal_dev_ops->xstats_reset)(dev);
+
+	return 0;
 }
 
 static int
@@ -646,7 +651,7 @@ sw_port_mac_addr_remove(struct rte_eth_dev *dev, uint32_t index)
 }
 
 static int
-sw_port_mac_addr_add(struct rte_eth_dev *dev, struct ether_addr *mac_addr,
+sw_port_mac_addr_add(struct rte_eth_dev *dev, struct rte_ether_addr *mac_addr,
 		     uint32_t index, uint32_t vmdq)
 {
 	struct sw_port *port = dev->data->dev_private;
@@ -663,7 +668,7 @@ static void
 static int
 #endif
 sw_port_default_mac_addr_set(struct rte_eth_dev *dev,
-			     struct ether_addr *mac_addr)
+			     struct rte_ether_addr *mac_addr)
 {
 	struct sw_port *swport = dev->data->dev_private;
 
@@ -770,9 +775,9 @@ static inline void random_mac_addr(uint8_t *addr)
 	uint64_t rand = rte_rand();
 	uint8_t *p = (uint8_t *)&rand;
 
-	memcpy(addr, p, ETHER_ADDR_LEN);
-	addr[0] &= ~ETHER_GROUP_ADDR;       /* clear multicast bit */
-	addr[0] |= ETHER_LOCAL_ADMIN_ADDR;  /* set local assignment bit */
+	memcpy(addr, p, RTE_ETHER_ADDR_LEN);
+	addr[0] &= ~RTE_ETHER_GROUP_ADDR;       /* clear multicast bit */
+	addr[0] |= RTE_ETHER_LOCAL_ADMIN_ADDR;  /* set local assignment bit */
 }
 
 static int
@@ -856,7 +861,7 @@ sw_port_vdev_create(struct rte_vdev_device *dev,
 
 	if (internal_args->mac)
 		memcpy(&switch_port->address.addr_bytes[0], internal_args->mac,
-		       sizeof(struct ether_addr));
+		       sizeof(struct rte_ether_addr));
 		else
 			random_mac_addr(&switch_port->address.addr_bytes[0]);
 
