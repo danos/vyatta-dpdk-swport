@@ -1,3 +1,12 @@
+vyatta-dpdk-swport (0.1.23) unstable; urgency=medium
+
+  [ Charles (Chas) Williams ]
+  * dpdk: 19.11: update for API changes (Bugfix: VRVDR-45636)
+
+  [ Simon Barber ]
+
+ -- Simon Barber <sbarber@mail.eng.vyatta.net>  Mon, 11 May 2020 09:58:05 +0100
+
 vyatta-dpdk-swport (0.1.22) unstable; urgency=medium
 
   * Makefile: don't use -march=native (Fixes: VRVDR-49400)
