@@ -1,3 +1,10 @@
+vyatta-dpdk-swport (0.1.24) unstable; urgency=medium
+
+  * Makefile: explicitly link against rte_bus_vdev (Fixes: VRVDR-51388)
+  * Makefile: only link to libraries that are needed
+
+ -- Robert Shearman <robert.shearman@att.com>  Tue, 02 Jun 2020 15:56:43 +0100
+
 vyatta-dpdk-swport (0.1.23) unstable; urgency=medium
 
   [ Charles (Chas) Williams ]
