@@ -954,11 +954,15 @@ sw_port_pmd_uninit(struct rte_vdev_device *dev)
 
 	switch_port = eth_dev->data->dev_private;
 
-	for (i = 0; i < eth_dev->data->nb_tx_queues; i++)
-		sw_port_tx_queue_release(eth_dev->data->tx_queues[i]);
+	if (eth_dev->data->tx_queues) {
+		for (i = 0; i < eth_dev->data->nb_tx_queues; i++)
+			sw_port_tx_queue_release(eth_dev->data->tx_queues[i]);
+	}
 
-	for (i = 0; i < eth_dev->data->nb_rx_queues; i++)
-		sw_port_rx_queue_release(eth_dev->data->rx_queues[i]);
+	if (eth_dev->data->rx_queues) {
+		for (i = 0; i < eth_dev->data->nb_rx_queues; i++)
+			sw_port_rx_queue_release(eth_dev->data->rx_queues[i]);
+	}
 
 	free(switch_port->name);
 
