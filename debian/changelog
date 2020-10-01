@@ -1,3 +1,10 @@
+vyatta-dpdk-swport (0.1.25) unstable; urgency=medium
+
+  * Fix crash when uniniting port where queues not setup (Fixes:
+    VRVDR-53128)
+
+ -- Robert Shearman <robert.shearman@att.com>  Thu, 01 Oct 2020 09:29:48 +0100
+
 vyatta-dpdk-swport (0.1.24) unstable; urgency=medium
 
   * Makefile: explicitly link against rte_bus_vdev (Fixes: VRVDR-51388)
