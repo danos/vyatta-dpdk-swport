@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019, AT&T Intellectual Property. All rights reserved.
+ * Copyright (c) 2018-2021, AT&T Intellectual Property. All rights reserved.
  *
  * SPDX-License-Identifier: (LGPL-2.1-only AND BSD-3-Clause)
  */
@@ -371,13 +371,16 @@ sw_port_dev_start(struct rte_eth_dev *dev)
 	return -ENOTSUP;
 }
 
-static void
+static int
 sw_port_dev_stop(struct rte_eth_dev *dev)
 {
 	struct sw_port *port = dev->data->dev_private;
+	int ret = 0;
 
 	if (port->fal_dev_ops->dev_stop)
-		(port->fal_dev_ops->dev_stop)(dev);
+		ret = (port->fal_dev_ops->dev_stop)(dev);
+
+	return ret;
 }
 
 static struct rte_ring *
@@ -881,7 +884,6 @@ sw_port_vdev_create(struct rte_vdev_device *dev,
 		data->dev_flags |= RTE_ETH_DEV_INTR_LSC;
 
 	eth_dev->dev_ops = &eth_ops;
-	data->kdrv = RTE_KDRV_NONE;
 	data->numa_node = numa_node;
 
 	TAILQ_INIT(&(eth_dev->link_intr_cbs));
@@ -1094,7 +1096,7 @@ sw_port_fal_report_link_intr(struct sw_port *sw_port, struct rte_eth_link *link)
 	int ret;
 
 	ret = sw_port_atomic_copy_link_status(dst, src);
-	_rte_eth_dev_callback_process(sw_port->dev, RTE_ETH_EVENT_INTR_LSC,
+	rte_eth_dev_callback_process(sw_port->dev, RTE_ETH_EVENT_INTR_LSC,
 #if RTE_VERSION < RTE_VERSION_NUM(18,02,0,0)
 				      NULL, NULL);
 #else

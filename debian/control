@@ -2,8 +2,9 @@ Source: vyatta-dpdk-swport
 Section: net
 Priority: optional
 Maintainer: Vyatta Package Maintainers <DL-vyatta-help@att.com>
-Build-Depends: debhelper (>= 9), libdpdk-dev, pkg-config,
-               libdpdk-dev (>= 19.11),
+Build-Depends: debhelper (>= 9),
+               libdpdk-dev (>= 20.11),
+               pkg-config,
 Standards-Version: 3.9.8
 
 Package: libvyatta-dpdk-swport1

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019, AT&T Intellectual Property. All rights reserved.
+ * Copyright (c) 2018-2021, AT&T Intellectual Property. All rights reserved.
  *
  * SPDX-License-Identifier: LGPL-2.1-only
  */
@@ -10,6 +10,7 @@
 #include <rte_config.h>
 #include <rte_mbuf.h>
 #include <rte_ethdev.h>
+#include <rte_ethdev_driver.h>
 
 #ifdef __cplusplus
 extern "C" {
