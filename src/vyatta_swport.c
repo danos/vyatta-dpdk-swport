@@ -745,6 +745,50 @@ sw_port_vlan_filter_set(struct rte_eth_dev *dev, uint16_t vlan_id, int on)
 	return -ENOTSUP;
 }
 
+static int
+sw_port_promisc_enable(struct rte_eth_dev *dev)
+{
+	struct sw_port *port = dev->data->dev_private;
+
+	if (port->fal_dev_ops->promiscuous_enable)
+		return (port->fal_dev_ops->promiscuous_enable)(dev);
+
+	return -ENOTSUP;
+}
+
+static int
+sw_port_promisc_disable(struct rte_eth_dev *dev)
+{
+	struct sw_port *port = dev->data->dev_private;
+
+	if (port->fal_dev_ops->promiscuous_disable)
+		return (port->fal_dev_ops->promiscuous_disable)(dev);
+
+	return -ENOTSUP;
+}
+
+static int
+sw_port_allmulti_enable(struct rte_eth_dev *dev)
+{
+	struct sw_port *port = dev->data->dev_private;
+
+	if (port->fal_dev_ops->allmulticast_enable)
+		return (port->fal_dev_ops->allmulticast_enable)(dev);
+
+	return -ENOTSUP;
+}
+
+static int
+sw_port_allmulti_disable(struct rte_eth_dev *dev)
+{
+	struct sw_port *port = dev->data->dev_private;
+
+	if (port->fal_dev_ops->allmulticast_disable)
+		return (port->fal_dev_ops->allmulticast_disable)(dev);
+
+	return -ENOTSUP;
+}
+
 static const struct eth_dev_ops eth_ops = {
 	.dev_start = sw_port_dev_start,
 	.dev_stop = sw_port_dev_stop,
@@ -771,6 +815,10 @@ static const struct eth_dev_ops eth_ops = {
 	.get_module_info = sw_port_get_module_info,
 	.get_module_eeprom = sw_port_get_module_eeprom,
 	.vlan_filter_set = sw_port_vlan_filter_set,
+	.promiscuous_enable = sw_port_promisc_enable,
+	.promiscuous_disable = sw_port_promisc_disable,
+	.allmulticast_enable  = sw_port_allmulti_enable,
+	.allmulticast_disable = sw_port_allmulti_disable,
 };
 
 static inline void random_mac_addr(uint8_t *addr)
