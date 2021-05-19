@@ -1,3 +1,9 @@
+vyatta-dpdk-swport (0.1.26) unstable; urgency=medium
+
+  * dpdk: changes for version 20.11 (Bugfix: VRVDR-54129)
+
+ -- Charles (Chas) Williams <ciwillia@vyatta.att-mail.com>  Wed, 19 May 2021 07:19:04 -0400
+
 vyatta-dpdk-swport (0.1.25) unstable; urgency=medium
 
   * Fix crash when uniniting port where queues not setup (Fixes:
