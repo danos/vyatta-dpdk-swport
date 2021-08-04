@@ -1,3 +1,9 @@
+vyatta-dpdk-swport (0.1.25.1) unstable; urgency=medium
+
+  * Implement promiscuous and allmulti operations (Bugfix: VRVDR-53937)
+
+ -- Charles (Chas) Williams <ciwillia@vyatta.att-mail.com>  Wed, 04 Aug 2021 06:09:14 -0400
+
 vyatta-dpdk-swport (0.1.25) unstable; urgency=medium
 
   * Fix crash when uniniting port where queues not setup (Fixes:
